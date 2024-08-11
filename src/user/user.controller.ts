@@ -1,9 +1,9 @@
-import { Controller, Post, Body, BadRequestException, Get, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, BadRequestException, Get, UseGuards, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
-
+import { Request } from 'express';
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -28,5 +28,11 @@ export class UserController {
     const token = this.userService.generateToken(user);
 
     return token;
+  }
+
+  @Get('test')
+  @UseGuards(JwtAuthGuard)
+  async test(@Req() req: Request) {
+    return req.user;
   }
 }
