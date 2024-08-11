@@ -1,6 +1,8 @@
-import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body, BadRequestException, Get, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('users')
 export class UserController {
@@ -15,5 +17,16 @@ export class UserController {
     }
 
     return this.userService.createUser(registerUserDto);
+  }
+
+  @Post('login')
+  async login(@Body() loginUserDto: LoginUserDto) {
+    const user = await this.userService.validateUser(loginUserDto.email, loginUserDto.password);
+
+    if(!user) throw new BadRequestException('Invalid Credentials');
+
+    const token = this.userService.generateToken(user);
+
+    return token;
   }
 }

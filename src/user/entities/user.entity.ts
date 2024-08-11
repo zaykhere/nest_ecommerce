@@ -14,7 +14,7 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ type: 'boolean', default: true })
+  @Column({ type: 'boolean', default: false })
   isAdmin: boolean;
 
   constructor(userData: Partial<User>) {
