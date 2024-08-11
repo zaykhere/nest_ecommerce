@@ -4,6 +4,7 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Request } from 'express';
+import { AdminGuard } from 'src/admin/admin.guard';
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -31,7 +32,7 @@ export class UserController {
   }
 
   @Get('test')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   async test(@Req() req: Request) {
     return req.user;
   }
