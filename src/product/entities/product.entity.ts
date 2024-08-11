@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
-import { Category } from './category.entity'; // Adjust the path as necessary
+import { Category } from './category.entity';
 import { ProductVariant } from './product-variant.entity';
 
 @Entity('products')

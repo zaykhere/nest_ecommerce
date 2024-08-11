@@ -1,20 +1,27 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Product } from './product.entity';
-import { Color } from './color.entity';
-import { Size } from './size.entity';
+
+enum Size {
+  S = 'S',
+  M = 'M',
+  L = 'L',
+  XL = 'XL',
+  XXL = 'XXL',
+}
 
 @Entity('product_variants')
 export class ProductVariant {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Product, product => product.productVariants)
+  @ManyToOne(() => Product, (product) => product.productVariants)
   product: Product;
 
-  @ManyToOne(() => Color, color => color.productVariants)
-  color: Color;
-
-  @ManyToOne(() => Size, size => size.productVariants)
+  @Column({
+    type: 'enum',
+    enum: Size,
+    default: Size.M,
+  })
   size: Size;
 
   @Column('decimal', { precision: 10, scale: 2 })
