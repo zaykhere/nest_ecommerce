@@ -5,6 +5,7 @@ import { DataSource, Repository } from 'typeorm';
 import { ProductVariant } from './entities/product-variant.entity';
 import { Category } from './entities/category.entity';
 import { CreateProductDto } from './dto/createProduct.dto';
+import { GetProductsDto } from './dto/getProducts.dto';
 
 @Injectable()
 export class ProductService {
@@ -74,5 +75,40 @@ export class ProductService {
         finally {
             await queryRunner.release();
         }
+    }
+
+    async getProductsPaginated(query: GetProductsDto) {
+      const { page, limit, search, sortBy, sortOrder } = query;
+      const offset = (page - 1) * limit;
+
+      const queryBuilder = this.productRepository
+        .createQueryBuilder('products')
+        .leftJoinAndSelect('products.category', 'category')
+        .leftJoinAndSelect('products.productVariants', 'productVariants')
+        .skip(offset)
+        .take(limit)
+        .orderBy(`products.${sortBy}`, sortOrder);
+
+      if (search) {
+        queryBuilder.andWhere(
+          'products.name ILIKE :search OR products.description ILIKE :search',
+          { search: `%${search}%` },
+        );
+      }
+
+      const [products, total] = await queryBuilder.getManyAndCount();
+
+      const totalPages = Math.ceil(total / limit);
+      const nextPage = page < totalPages ? page + 1 : null;
+
+      return {
+        data: products,
+        meta: {
+          totalItems: total,
+          totalPages,
+          currentPage: page,
+          nextPage,
+        },
+      };
     }
 }

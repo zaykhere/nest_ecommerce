@@ -3,6 +3,7 @@ import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/createProduct.dto';
 import { JwtAuthGuard } from 'src/user/guards/jwt-auth.guard';
 import { AdminGuard } from 'src/admin/admin.guard';
+import { GetProductsDto } from './dto/getProducts.dto';
 
 @Controller('products')
 export class ProductController {
@@ -22,7 +23,10 @@ export class ProductController {
 
     @Get()
     async getProductsPaginated(
-        @Query('page') page: number = 1,
-        @Query('limit') limit: number = 10,
-    ) {}
+        @Query() query: GetProductsDto
+    ) {
+        const products = await this.productService.getProductsPaginated(query);
+
+        return products;
+    }
 }
