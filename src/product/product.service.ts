@@ -111,4 +111,15 @@ export class ProductService {
         },
       };
     }
+
+    async getProductById(id: number): Promise<Product | null> {
+        const product = await this.productRepository.findOne({
+            where: {
+                id
+            },
+            relations: ['category', 'productVariants']
+        });
+
+        return product;
+    }
 }

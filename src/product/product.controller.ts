@@ -1,4 +1,4 @@
-import { Body, Controller, HttpException, InternalServerErrorException, Post, Query, UseGuards, Get } from '@nestjs/common';
+import { Body, Controller, HttpException, InternalServerErrorException, Post, Query, UseGuards, Get, Param, ParseIntPipe, NotFoundException } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/createProduct.dto';
 import { JwtAuthGuard } from 'src/user/guards/jwt-auth.guard';
@@ -28,5 +28,18 @@ export class ProductController {
         const products = await this.productService.getProductsPaginated(query);
 
         return products;
+    }
+
+    @Get(':id')
+    async getProductById(
+        @Param('id', ParseIntPipe) id: number,
+    ) {
+        const product = await this.productService.getProductById(id);
+
+        if(!product) {
+            throw new NotFoundException("Product not found");
+        }
+
+        return product;
     }
 }
