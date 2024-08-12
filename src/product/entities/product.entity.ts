@@ -16,7 +16,7 @@ export class Product {
   @Column({ nullable: true })
   description?: string;
 
-  @ManyToOne(() => Category, category => category.products)
+  @ManyToOne(() => Category, category => category.products, {nullable: false})
   category: Category;
 
   @OneToMany(() => ProductVariant, productVariant => productVariant.product)

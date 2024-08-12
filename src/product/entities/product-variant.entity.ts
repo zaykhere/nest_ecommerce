@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Product } from './product.entity';
 
-enum Size {
+export enum Size {
   S = 'S',
   M = 'M',
   L = 'L',
