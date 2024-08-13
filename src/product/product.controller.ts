@@ -1,9 +1,10 @@
-import { Body, Controller, HttpException, InternalServerErrorException, Post, Query, UseGuards, Get, Param, ParseIntPipe, NotFoundException } from '@nestjs/common';
+import { Body, Controller, HttpException, InternalServerErrorException, Post, Query, UseGuards, Get, Param, ParseIntPipe, NotFoundException, Put } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/createProduct.dto';
 import { JwtAuthGuard } from 'src/user/guards/jwt-auth.guard';
 import { AdminGuard } from 'src/admin/admin.guard';
 import { GetProductsDto } from './dto/getProducts.dto';
+import { UpdateProductDto } from './dto/updateProduct.dto';
 
 @Controller('products')
 export class ProductController {
@@ -41,5 +42,21 @@ export class ProductController {
         }
 
         return product;
+    }
+
+    @Put(':id')
+    async updateProduct(
+        @Param('id', ParseIntPipe) id: number, 
+        @Body() updatePayload: UpdateProductDto
+    ) {
+        const product = await this.productService.getProductById(id);
+
+        if(!product) {
+            throw new NotFoundException("Product not found");
+        }
+
+        const updatedProduct = await this.productService.updateProduct(product.id, updatePayload);
+
+        return updatedProduct;
     }
 }
