@@ -195,4 +195,12 @@ export class ProductService {
         await queryRunner.release();
       }
   }
+
+  async deleteProduct(id: number, data: Product) {
+    const variantIds = data.productVariants.map((item) => item.id);
+
+    await this.productVariantRepository.delete({id: In(variantIds)});
+
+    return await this.productRepository.delete({id});
+  }
 }
