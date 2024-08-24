@@ -1,7 +1,8 @@
 import { Controller } from '@nestjs/common';
 import { OrderService } from './order.service';
-import { Post, Body, InternalServerErrorException } from '@nestjs/common';
+import { Post, Body, InternalServerErrorException, Req, Res } from '@nestjs/common';
 import { CreateOrderDto } from './dto/createOrder.dto';
+import {Request, Response} from "express";
 
 @Controller('orders')
 export class OrderController {
@@ -18,5 +19,15 @@ export class OrderController {
 
     throw new InternalServerErrorException("Something went wrong");
   
+  }
+
+  @Post('webhook')
+  async handleWebhook(@Req() req: Request, @Res() res: Response) {
+    const sig = req.headers['stripe-signature'];
+    const payload = req.rawBody; // Make sure rawBody is available (e.g., by using express.raw())
+
+    await this.orderService.processWebhook(payload, sig);
+
+    res.status(200).json({ received: true });
   }
 }
