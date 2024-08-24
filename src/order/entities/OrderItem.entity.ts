@@ -1,4 +1,4 @@
-import { ProductVariant } from 'src/product/entities/product-variant.entity';
+import { ProductVariant } from 'src/product/entities/productVariant.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, UpdateDateColumn } from 'typeorm';
 import { Order } from './Order.entity';
 

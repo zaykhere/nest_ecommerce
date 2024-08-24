@@ -14,6 +14,9 @@ export class ProductVariant {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  name: string;
+
   @ManyToOne(() => Product, (product) => product.productVariants)
   product: Product;
 

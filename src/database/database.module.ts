@@ -13,6 +13,8 @@ import {ConfigService} from '@nestjs/config';
       password: configService.getOrThrow('PG_PASS'),
       autoLoadEntities: true,
       synchronize: configService.getOrThrow('PG_SYNCHRONIZE'),
+      logging: true, // Enables query logging
+      logger: 'advanced-console', // Optional: choose a logging format
     }),
     inject: [ConfigService]
   })]

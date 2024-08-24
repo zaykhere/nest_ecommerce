@@ -1,5 +1,5 @@
 import { IsEnum, IsNumber, IsPositive } from 'class-validator';
-import { Size } from '../entities/product-variant.entity';
+import { Size } from '../entities/productVariant.entity';
 
 export class CreateProductVariantDto {
   @IsEnum(Size)

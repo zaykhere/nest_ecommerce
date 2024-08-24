@@ -32,4 +32,7 @@ export class Order {
 
   @Column()
   country: string;
+
+  @Column({type: 'boolean', default: 'false'})
+  isPaymentConfirmed: boolean
 }
